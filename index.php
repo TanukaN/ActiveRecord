@@ -48,7 +48,7 @@
     $record = htmlTable::makeTable($record);
     StringFunctions::horizontalRule();
 
-    $id=59;
+    $id=60;
     StringFunctions::printThisInH1('Delete Record From Accounts Table');
     $record = new account();
     $record->delete($id);
@@ -64,7 +64,7 @@
     $record = htmlTable::makeTable($record);
     StringFunctions::horizontalRule();
 
-    $id=60;
+    $id=61;
     StringFunctions::printThisInH1('Update New Record in Accounts Table');
     StringFunctions::printThisInH3('Updated lname = Nayak where id = '.$id);
     $obj->save($id);
@@ -84,7 +84,7 @@
     $record = htmlTable::makeTable($record);
     StringFunctions::horizontalRule();
 
-    $id=36;
+    $id=37;
     StringFunctions::printThisInH1('Delete Record From Todos Table with id = ' .$id);
     $record = new todo();
     $record->delete($id);
@@ -100,7 +100,7 @@
     $record = htmlTable::makeTable($record);
     StringFunctions::horizontalRule();
 
-    $id=37;
+    $id=38;
     StringFunctions::printThisInH1('Update New Record in Todos Table');
     StringFunctions::printThisInH3('Updated owneremail = tn76@njit.edu where id = '.$id);
     $obj->save($id);
@@ -108,5 +108,3 @@
     $record = htmlTable::makeTable($record);
     StringFunctions::horizontalRule();
 ?>
-
-
