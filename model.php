@@ -1,39 +1,71 @@
 <?php
     class model {
-        static $tableName;
-        static $key;
-        static $value;
-        public function save($id) {
-            self::$tableName = static::$tableName;
-            if (empty($id) ) {
-                $array = get_object_vars($this);
-                self::$key = implode(', ', $array);
-                self::$value = implode(', ', array_fill(0, count($array), '?'));
-                $sql = $this->insert(self::$tableName, self::$key, self::$value);
-                $conn = dbConn::getConnection();
-                $stmt = $conn->prepare($sql);
-                $stmt->execute(static::$dataToInsert);
+        protected $tableName;
+        protected static $statement;
+        public function save()
+        {
+            $array = get_object_vars($this);
+            unset($array["tableName"]);
+            if ($this->id == '') {
+                $sql = $this->insert();
+            } else {
+                $sql = $this->update();
             }
-            else {
-                $sql = $this->update(self::$tableName,static::$columnToUpdate, static::$updateData,$id);
-                $conn = dbConn::getConnection();
-                $stmt = $conn->prepare($sql);
-                $stmt->execute();
+            $db = dbConn::getConnection();
+            self::$statement = $db->prepare($sql);
+
+            self::bindValues($array,$this);
+            self::$statement->execute();
+            $lastId = $db->lastInsertId();
+            return ($lastId);
+        }
+
+        private static function bindValues($array,$obj){
+            foreach ($array as $key => $value) {
+                if ($obj->id == '') {
+                    self::$statement->bindValue(":$key", "$value");
+                } else {
+                    if ($value != '' && $key != "id") {
+                        self::$statement->bindValue(":$key", "$value");
+                    }
+                }
             }
         }
-        private function insert($tableName,$key,$value) {
-            $sql = "INSERT INTO ".$tableName." (".$key.") VALUES (".$value.")";
+        /*
+        * Method to prepare the insert query
+        */
+        private function insert()
+        {
+            $array = get_object_vars($this);
+            unset($array["tableName"]);
+            $columnString = implode(',', array_keys($array));
+            $valueString  = ":" . implode(',:', array_keys($array));
+            $sql          = "INSERT INTO $this->tableName (" . $columnString . ") VALUES (" . $valueString . ")";
             return $sql;
         }
-        private function update($tableName,$column,$value,$id) {
-            $sql = "UPDATE ".$tableName." SET ".$column." = '".$value."' WHERE id=" .$id;
+
+        private function update()
+        {
+            $array = get_object_vars($this);
+            unset($array["tableName"]);
+            $sql = "UPDATE " . $this->tableName . " SET";
+            foreach ($array as $key => $value) {
+                if ($value != "" & $key != "id") {
+                    $sql .= " " . $key . " = :$key ,";
+                }
+            }
+            $sql = substr($sql, 0, -1);
+            $sql .= " WHERE id = " . $this->id;
             return $sql;
         }
-        public function delete($id) {
-            $conn = dbConn::getConnection();
-            $sql = "DELETE from ".static::$tableName." WHERE id=".$id;
-            $stmt = $conn->prepare($sql);
-            $stmt->execute();
+
+        public function delete()
+        {
+            $array           = get_object_vars($this);
+            $sql             = "DELETE FROM " . $this->tableName . " WHERE id = " . $this->id;
+            $db              = dbConn::getConnection();
+            self::$statement = $db->prepare($sql);
+            self::$statement->execute();
         }
     }
 ?>
