@@ -36,75 +36,100 @@
         }
     }
 
-    /**********************************ACCOUNTS TABLE***********************************/
-    StringFunctions::printThisInH1('Select One Record From Accounts Table');            //Select One Record
-    StringFunctions::printThisInH3('Record with id = 1 is selected');
-    $record = accounts::findOne(1);
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+    $obj=new main();
 
-    StringFunctions::printThisInH1('Select All Records From Accounts Table');           //Select All Records
-    $record = accounts::findAll();
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+    class main
+    {
+        public function __construct()
+        {
+            /**********************************ACCOUNTS TABLE***********************************/
+            StringFunctions::printThisInH1('Select One Record From Accounts Table');            //Select One Record
+            StringFunctions::printThisInH3('Record with id = 1 is selected');
+            $record = accounts::findOne(1);
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
 
-    $id=60;
-    StringFunctions::printThisInH1('Delete Record From Accounts Table');                //Delete One record
-    $record = new account();
-    $record->delete($id);
-    StringFunctions::printThisInH3('Record with id = '.$id.' is deleted');
-    $record = accounts::findAll();
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+            StringFunctions::printThisInH1('Select All Records From Accounts Table');           //Select All Records
+            $record = accounts::findAll();
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
 
-    StringFunctions::printThisInH1('Insert New Record in Accounts Table');              //Insert One Record
-    $obj = new Account;
-    $obj->save('');
-    $record = accounts::findAll();
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+            StringFunctions::printThisInH1('Insert New Record in Accounts Table');              //Insert One Record
+            $obj = new account();
+            $obj->email = "tn76@njit.edu";
+            $obj->fname = "Tanuka";
+            $obj->lname = "N";
+            $obj->phone = "9876543210";
+            $obj->birthday = "1990-10-15";
+            $obj->gender = "female";
+            $obj->password = "12345";
+            $newID = $obj->save();
+            $record = accounts::findAll();
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
 
-    $id=61;
-    StringFunctions::printThisInH1('Update New Record in Accounts Table');              //Update One Record
-    StringFunctions::printThisInH3('Updated lname = Nayak where id = '.$id);
-    $obj->save($id);
-    $record = accounts::findAll();
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+            StringFunctions::printThisInH1('Update New Record in Accounts Table');              //Update One Record
+            StringFunctions::printThisInH3('Updated lname = Nayak where id = ' .$newID);
+            $obj = new account();
+            $obj->id = $newID;
+            $obj->lname = "Nayak";
+            $obj->save();
+            $record = accounts::findAll();
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
 
-    /**************************************TODOS TABLE***********************************/
-    StringFunctions::printThisInH1('Select One Record From Todos Table');               //Select One Record
-    StringFunctions::printThisInH3('Record with id = 1 is selected');
-    $record = todos::findOne(1);
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+            StringFunctions::printThisInH1('Delete Record From Accounts Table');                //Delete One record
+            $obj = new account();
+            $obj->id = $newID;
+            $obj->delete();
+            StringFunctions::printThisInH3('Record with id = '. $newID .'  is deleted');
+            $record = accounts::findAll();
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
 
-    StringFunctions::printThisInH1('Select All Records From Todos Table');              //Select All Records
-    $record = todos::findAll();
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+            /**************************************TODOS TABLE***********************************/
+            StringFunctions::printThisInH1('Select One Record From Todos Table');               //Select One Record
+            StringFunctions::printThisInH3('Record with id = 1 is selected');
+            $record = todos::findOne(1);
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
 
-    $id=37;
-    StringFunctions::printThisInH1('Delete Record From Todos Table with id = ' .$id);   //Delete One Record
-    $record = new todo();
-    $record->delete($id);
-    StringFunctions::printThisInH3('Record with id = '.$id.' is deleted');
-    $record = todos::findAll();
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+            StringFunctions::printThisInH1('Select All Records From Todos Table');              //Select All Records
+            $record = todos::findAll();
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
 
-    StringFunctions::printThisInH1('Insert New Record in Todos Table');                 //Insert One Record
-    $obj = new todo();
-    $obj->save('');
-    $record = todos::findAll();
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+            StringFunctions::printThisInH1('Insert New Record in Todos Table');                //Insert One Record
+            $obj = new todo();
+            $obj->owneremail = "tn@njit.edu";
+            $obj->ownerid = "34";
+            $obj->createddate = "2017-11-14 00:00:00";
+            $obj->duedate = "2017-11-19 00:00:00";
+            $obj->message = "Active Record";
+            $obj->isdone = "1";
+            $newID = $obj->save();
+            $record = todos::findAll();
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
 
-    $id=38;
-    StringFunctions::printThisInH1('Update New Record in Todos Table');                 //Update One Record
-    StringFunctions::printThisInH3('Updated owneremail = tn76@njit.edu where id = '.$id);
-    $obj->save($id);
-    $record = todos::findAll();
-    $record = htmlTable::makeTable($record);
-    StringFunctions::horizontalRule();
+            StringFunctions::printThisInH1('Update New Record in Todos Table');              //Update One Record
+            StringFunctions::printThisInH3('Updated owneremail = tn76@njit.edu where id = ' .$newID);
+            $obj = new todo();
+            $obj->id = $newID;
+            $obj->owneremail = "tn76@njit.edu";
+            $obj->save();
+            $record = todos::findAll();
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
+
+            StringFunctions::printThisInH1('Delete Record From Todos Table');                //Delete One record
+            $obj = new todo();
+            $obj->id = $newID;
+            $obj->delete();
+            StringFunctions::printThisInH3('Record with id = '. $newID .'  is deleted');
+            $record = todos::findAll();
+            htmlTable::makeTable($record);
+            StringFunctions::horizontalRule();
+        }
+    }
 ?>
