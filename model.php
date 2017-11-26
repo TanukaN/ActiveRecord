@@ -2,8 +2,7 @@
     class model {
         protected $tableName;
         protected static $statement;
-        public function save()
-        {
+        public function save() {
             $array = get_object_vars($this);
             unset($array["tableName"]);
             if ($this->id == '') {
@@ -13,14 +12,13 @@
             }
             $db = dbConn::getConnection();
             self::$statement = $db->prepare($sql);
-
             self::bindValues($array,$this);
             self::$statement->execute();
             $lastId = $db->lastInsertId();
             return ($lastId);
         }
 
-        private static function bindValues($array,$obj){
+        private static function bindValues($array,$obj) {
             foreach ($array as $key => $value) {
                 if ($obj->id == '') {
                     self::$statement->bindValue(":$key", "$value");
@@ -31,11 +29,8 @@
                 }
             }
         }
-        /*
-        * Method to prepare the insert query
-        */
-        private function insert()
-        {
+
+        private function insert() {
             $array = get_object_vars($this);
             unset($array["tableName"]);
             $columnString = implode(',', array_keys($array));
@@ -44,8 +39,7 @@
             return $sql;
         }
 
-        private function update()
-        {
+        private function update() {
             $array = get_object_vars($this);
             unset($array["tableName"]);
             $sql = "UPDATE " . $this->tableName . " SET";
@@ -59,11 +53,10 @@
             return $sql;
         }
 
-        public function delete()
-        {
-            $array           = get_object_vars($this);
-            $sql             = "DELETE FROM " . $this->tableName . " WHERE id = " . $this->id;
-            $db              = dbConn::getConnection();
+        public function delete() {
+            $array = get_object_vars($this);
+            $sql = "DELETE FROM " . $this->tableName . " WHERE id = " . $this->id;
+            $db = dbConn::getConnection();
             self::$statement = $db->prepare($sql);
             self::$statement->execute();
         }
